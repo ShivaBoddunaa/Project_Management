@@ -1,4 +1,5 @@
-from fastapi import APIRouter,Request,From
+from fastapi import APIRouter, Request, Form
+
 from utils import db
 from supabase import client
 from fastapi.templating import Jinja2Templates
