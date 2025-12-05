@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if proj_id %}Project Tasks{% else %}All Tasks{% endif %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-title {
+            color: white;
+        }
+
+        .header-title h1 {
+            font-size: 2.5em;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-title p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .back-btn, .create-btn {
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1em;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .create-btn {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+
+        .create-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
+        }
+
+        .tasks-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .task-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            border-left: 4px solid #667eea;
+        }
+
+        .task-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .task-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+            flex: 1;
+        }
+
+        .task-status {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+            white-space: nowrap;
+            margin-left: 10px;
+        }
+
+        .task-status.pending {
+            background: #ffe5e5;
+            color: #c0392b;
+        }
+
+        .task-status.inprogress {
+            background: #fff4e5;
+            color: #e67e22;
+        }
+
+        .task-status.completed {
+            background: #e5f5e5;
+            color: #27ae60;
+        }
+
+        .task-description {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .task-footer {
+            display: flex;
+            gap: 10px;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-update {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-update:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 20px;
+            color: white;
+        }
+
+        .empty-state p {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-title h1 {
+                font-size: 1.8em;
+            }
+
+            .tasks-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-title">
+                {% if project %}
+                    <h1>✅ {{ project['name'] }} - Tasks</h1>
+                    <p>{{ project['description'] }}</p>
+                {% else %}
+                    <h1>✅ All Tasks</h1>
+                    <p>View and manage all your tasks</p>
+                {% endif %}
+            </div>
+            <div style="display: flex; gap: 10px;">
+                {% if project %}
+                <a href="/projects" class="back-btn">← Back to Projects</a>
+                {% endif %}
+                <a href="/tasks/create{% if proj_id %}?proj_id={{ proj_id }}{% endif %}" class="create-btn">+ Create New Task</a>
+            </div>
+        </div>
+
+        <div class="tasks-container">
+            {% if tasks and tasks|length > 0 %}
+                {% for task in tasks %}
+                <div class="task-card">
+                    <div class="task-header">
+                        <h3 class="task-title">{{ task['title'] if task.get('title') else 'Untitled' }}</h3>
+                        <span class="task-status {{ task['status'] if task.get('status') else 'pending' }}">
+                            {{ task['status'] if task.get('status') else 'Pending' }}
+                        </span>
+                    </div>
+                    <p class="task-description">{{ task['description'] if task.get('description') else 'No description' }}</p>
+                    <div class="task-footer">
+                        <a href="/tasks/update?id={{ task['id'] }}" class="btn btn-update">Update</a>
+                        <a href="/tasks/delete?id={{ task['id'] }}" class="btn btn-delete">Delete</a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <p>No tasks found.</p>
+                    <a href="/tasks/create{% if proj_id %}?proj_id={{ proj_id }}{% endif %}" class="create-btn">+ Create Your First Task</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>

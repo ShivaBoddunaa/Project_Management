@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Project</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+        }
+        .form-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            padding: 32px;
+            max-width: 600px;
+            width: 100%;
+        }
+        .form-title {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 1.6rem;
+        }
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102,126,234,0.4); }
+        .btn-cancel { width: 100%; background: #6c757d; color: white; border: none; padding: 12px; border-radius: 5px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 10px; }
+        .btn-cancel:hover { background:#5a6268 }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2 class="form-title">✏️ Create New Project</h2>
+
+        <form method="POST" action="/projects/create">
+            <div class="mb-3">
+                <label for="proj_id" class="form-label">Project ID</label>
+                <input type="text" class="form-control" id="proj_id" name="proj_id" placeholder="PRJ-001" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="name" class="form-label">Project Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Project title" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" placeholder="Describe the project..." rows="4" required></textarea>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="created_at" class="form-label">Created At</label>
+                    <input type="date" class="form-control" id="created_at" name="created_at" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="budget" class="form-label">Budget (USD)</label>
+                    <input type="number" step="0.01" class="form-control" id="budget" name="budget" placeholder="12000">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="duration" class="form-label">Duration</label>
+                    <input type="text" class="form-control" id="duration" name="duration" placeholder="e.g. 30 days">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status" required>
+                        <option value="in-progress">In Progress</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="pending">Pending</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">Create Project</button>
+            <a href="/projects" class="btn-cancel d-inline-block text-center mt-2" style="text-decoration:none; padding:10px 12px;">Cancel</a>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

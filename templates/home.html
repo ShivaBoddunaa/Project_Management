@@ -354,7 +354,7 @@
 <body>
     <div class="greeting">
         <span class="greeting-emoji">👋</span>
-        <span>Hi Ali!</span>
+        <span>Hi User!</span>
     </div>
 
     <div class="container">
@@ -363,121 +363,57 @@
                 <h1>📊 Project Management Dashboard</h1>
                 <p>Track and manage all your projects in one place</p>
             </div>
-            <a href="/create" class="create-btn">+ Create New Project</a>
+            <a href="/projects/create" class="create-btn">+ Create New Project</a>
         </div>
 
 <!-------------------------------------------------  CARDS               ------------------>
+
         <div class="projects-container">
+        {% if projects and projects|length > 0 %}
+            {% for project in projects %}
             <div class="project-card">
                 <div class="card-header">
                     <div class="card-id-time">
-                        <span class="project-id">ID: 001</span>
-                        <span class="created-time">📅 Dec 5, 2025</span>
+                        <span class="project-id">ID: {{ project['proj_id'] }}</span>
+                        <span class="created-time">📅 {{ project['created_at'] }}</span>
                     </div>
-                    <select class="status-dropdown in-progress" onchange="updateStatus('001', this.value)">
-                        <option value="in-progress" selected>In-Progress</option>
-                        <option value="delivered">Delivered</option>
-                        <option value="pending">Pending</option>
+                    <select class="status-dropdown {{ project['status'] if project.get('status') else 'in-progress' }}" onchange="updateStatus('{{ project['proj_id'] }}', this.value)">
+                        <option value="in-progress" {% if project.get('status') == 'in-progress' %}selected{% endif %}>In-Progress</option>
+                        <option value="delivered" {% if project.get('status') == 'delivered' %}selected{% endif %}>Delivered</option>
+                        <option value="pending" {% if project.get('status') == 'pending' %}selected{% endif %}>Pending</option>
                     </select>
                 </div>
 
                 <div class="card-body">
-                    <h3 class="project-name">Website Redesign</h3>
-                    <p class="project-description">Complete redesign of company website with modern UI/UX, responsive
-                        design, and improved performance.</p>
+                    <h3 class="project-name"><a href="/projects/{{ project['proj_id'] }}/tasks" style="text-decoration: none; color: #222;">{{ project['name'] }}</a></h3>
+                    <p class="project-description">{{ project['description'] }}</p>
 
                     <div class="card-details">
                         <div class="detail-item">
                             <span class="detail-label">Budget</span>
-                            <span class="budget">$5,000</span>
+                            <span class="budget">{{ project['budget'] }}</span>
                         </div>
                         <div class="detail-item">
                             <span class="detail-label">Duration</span>
-                            <span class="duration">45 days</span>
+                            <span class="duration">{{ project['duration'] }}</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-footer">
-                    <button class="btn btn-update">Update</button>
-                    <button class="btn btn-delete">Delete</button>
-                </div>
-            </div>
-<!-------------------------------------------------  CARDS               ------------------>
-            <!-- <div class="project-card">
-                <div class="card-header">
-                    <div class="card-id-time">
-                        <span class="project-id">ID: 002</span>
-                        <span class="created-time">📅 Dec 1, 2025</span>
-                    </div>
-                    <select class="status-dropdown delivered" onchange="updateStatus('002', this.value)">
-                        <option value="delivered" selected>Delivered</option>
-                        <option value="in-progress">In-Progress</option>
-                        <option value="pending">Pending</option>
-                    </select>
-                </div>
-
-                <div class="card-body">
-                    <h3 class="project-name">Mobile App Development</h3>
-                    <p class="project-description">Native iOS and Android mobile application with real-time data
-                        synchronization and offline support.</p>
-
-                    <div class="card-details">
-                        <div class="detail-item">
-                            <span class="detail-label">Budget</span>
-                            <span class="budget">$12,000</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Duration</span>
-                            <span class="duration">60 days</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-footer">
-                    <button class="btn btn-update">Update</button>
-                    <button class="btn btn-delete">Delete</button>
+                    <a href = "/projects/update?id={{project['proj_id']}}" class="btn btn-update">Update</a>
+                    <a href = "/projects/delete?id={{project['proj_id']}}" class="btn btn-delete">Delete</a>
                 </div>
             </div>
 
-            <div class="project-card">
-                <div class="card-header">
-                    <div class="card-id-time">
-                        <span class="project-id">ID: 003</span>
-                        <span class="created-time">📅 Nov 28, 2025</span>
-                    </div>
-                    <select class="status-dropdown pending" onchange="updateStatus('003', this.value)">
-                        <option value="pending" selected>Pending</option>
-                        <option value="delivered">Delivered</option>
-                        <option value="in-progress">In-Progress</option>
-                    </select>
-                </div>
-
-                <div class="card-body">
-                    <h3 class="project-name">API Integration</h3>
-                    <p class="project-description">Integration of third-party payment gateway and analytics platform
-                        with existing systems.</p>
-
-                    <div class="card-details">
-                        <div class="detail-item">
-                            <span class="detail-label">Budget</span>
-                            <span class="budget">$3,500</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Duration</span>
-                            <span class="duration">15 days</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-footer">
-                    <button class="btn btn-update">Update</button>
-                    <button class="btn btn-delete">Delete</button> -->
-                </div>
+        {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <p>No projects found.</p>
+                <a href="/projects/create" class="create-btn">+ Create Your First Project</a>
             </div>
+        {% endif %}
         </div>
-    </div>
-
     </div>
 
     <script>
@@ -487,20 +423,6 @@
             // Update the dropdown styling based on status
             const dropdown = event.target;
             dropdown.className = `status-dropdown ${newStatus}`;
-
-            // Replace with your update endpoint
-            /*
-            fetch(`/update-status/${projectId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ status: newStatus })
-            })
-            .then(response => response.json())
-            .then(data => console.log('Status updated:', data))
-            .catch(error => console.error('Error:', error));
-            */
         }
 
         function updateProject(projectId) {

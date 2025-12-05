@@ -9,3 +9,8 @@ def read_root():
 
 app.include_router(projects_router)
 app.include_router(tasks_router)
+#     return {"Message":"Hello from Root"} 
+
+
+# app.include_router(projects_router, prefix="/projects")
+# app.include_router(tasks_router, prefix="/tasks")

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ project['name'] }} - Tasks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-back {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .header-back:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .header-title {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .project-info {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            color: #666;
+            font-size: 0.95em;
+            margin-top: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            gap: 8px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .tasks-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .task-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid #667eea;
+        }
+
+        .task-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .task-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .task-description {
+            color: #666;
+            font-size: 0.95em;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .task-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        .task-status.pending {
+            background: #ffe5e5;
+            color: #c0392b;
+        }
+
+        .task-status.inprogress {
+            background: #fff4e5;
+            color: #e67e22;
+        }
+
+        .task-status.completed {
+            background: #e5f5e5;
+            color: #27ae60;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .empty-state p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .btn-create {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .btn-create:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px;
+            }
+
+            .project-info {
+                flex-direction: column;
+            }
+
+            .tasks-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="/projects" class="header-back">← Back to Projects</a>
+            <h1 class="header-title">📋 {{ project['name'] }}</h1>
+            <p style="color: #666; margin-top: 5px;">{{ project['description'] }}</p>
+            <div class="project-info">
+                <div class="info-item">
+                    <span class="info-label">Status:</span>
+                    <span>{{ project['status'] }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Budget:</span>
+                    <span>${{ project['budget'] }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Duration:</span>
+                    <span>{{ project['duration'] }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="tasks-container">
+            {% if tasks and tasks|length > 0 %}
+                {% for task in tasks %}
+                <div class="task-card">
+                    <h3 class="task-title">{{ task['title'] if task.get('title') else task.get('name', 'Untitled Task') }}</h3>
+                    <p class="task-description">{{ task['description'] if task.get('description') else 'No description' }}</p>
+                    <span class="task-status {{ task['status'] if task.get('status') else 'pending' }}">
+                        {{ task['status'] if task.get('status') else 'Pending' }}
+                    </span>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state" style="grid-column: 1 / -1;">
+                    <p>No tasks found for this project.</p>
+                    <a href="/projects" class="btn-create">View All Projects</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>
