@@ -7,12 +7,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f7f7f9 0%, #eef0f3 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px 0;
+            color: #1f2937;
         }
         .form-container {
             background: white;
@@ -31,7 +32,7 @@
         }
         .btn-submit {
             width: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #bfa36b 0%, #d4b96a 100%);
             color: white;
             border: none;
             padding: 12px;
@@ -42,23 +43,23 @@
             transition: transform 0.2s, box-shadow 0.2s;
             margin-top: 10px;
         }
-        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102,126,234,0.4); }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(191,163,107,0.36); }
         .btn-cancel { width: 100%; background: #6c757d; color: white; border: none; padding: 12px; border-radius: 5px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 10px; }
         .btn-cancel:hover { background:#5a6268 }
     </style>
 </head>
 <body>
     <div class="form-container">
-        <h2 class="form-title">✏️ Create New Project</h2>
+        <h2 class="form-title">New Project</h2>
 
         <form method="POST" action="/projects/create">
             <div class="mb-3">
-                <label for="proj_id" class="form-label">Project ID</label>
+                <label for="proj_id" class="form-label">Project Reference</label>
                 <input type="text" class="form-control" id="proj_id" name="proj_id" placeholder="PRJ-001" required>
             </div>
 
             <div class="mb-3">
-                <label for="name" class="form-label">Project Name</label>
+                <label for="name" class="form-label">Project Title</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="Project title" required>
             </div>
 
@@ -69,19 +70,19 @@
 
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label for="created_at" class="form-label">Created At</label>
+                        <label for="created_at" class="form-label">Created On</label>
                     <input type="date" class="form-control" id="created_at" name="created_at" required>
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    <label for="budget" class="form-label">Budget (USD)</label>
+                    <label for="budget" class="form-label">Allocated Budget (USD)</label>
                     <input type="number" step="0.01" class="form-control" id="budget" name="budget" placeholder="12000">
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label for="duration" class="form-label">Duration</label>
+                    <label for="duration" class="form-label">Estimated Timeline</label>
                     <input type="text" class="form-control" id="duration" name="duration" placeholder="e.g. 30 days">
                 </div>
 

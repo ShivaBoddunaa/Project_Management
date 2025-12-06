@@ -12,11 +12,24 @@
             box-sizing: border-box;
         }
 
+                :root{
+                    --bg-start: #F7F7F9;
+                    --bg-end:   #FFFFFF;
+                    --primary:  #0b1220;
+                    --accent:   #2563EB;
+                    --accent-2: #BFA36B;
+                    --card-shadow: rgba(11,17,32,0.06);
+                    --card-shadow-strong: rgba(11,17,32,0.12);
+                    --radius: 10px;
+                    --max-width: 1200px;
+                }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: Inter, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(180deg, var(--bg-start) 0%, var(--bg-end) 100%);
             min-height: 100vh;
             padding: 40px 20px;
+            color: var(--primary);
         }
 
         .container {
@@ -24,17 +37,39 @@
             margin: 0 auto;
         }
 
-        .header {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 40px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
+                /* Header: modern SaaS-style */
+                .pm-header{
+                    padding: 28px 0 28px 0;
+                    width: 100%;
+                    box-sizing: border-box;
+                    border-bottom: 1px solid rgba(15,17,32,0.04);
+                    margin-bottom: 18px;
+                }
+
+                .pm-header__inner{
+                    max-width: var(--max-width);
+                    margin: 0 auto;
+                    display:flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 20px;
+                    padding: 0 20px;
+                }
+
+                .pm-header__content{ flex:1 1 auto; text-align:center }
+
+                .pm-title{ margin:0; font-weight:800; font-size:clamp(24px,3.6vw,36px); color:var(--primary); line-height:1 }
+                .pm-subtitle{ margin:8px 0 0 0; color:rgba(11,17,32,0.65); font-weight:500; font-size:clamp(13px,1.4vw,15px) }
+
+                .pm-header__actions{ flex:0 0 auto }
+
+                .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 16px; border-radius:8px; font-weight:600; font-size:14px; text-decoration:none; cursor:pointer; border:none }
+                .btn-primary{ background: linear-gradient(180deg,var(--accent) 0%, color-mix(in srgb,var(--accent) 30%,white) 100%); color:white; box-shadow:0 6px 20px rgba(37,99,235,0.12) }
+                .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 14px 36px rgba(37,99,235,0.14) }
 
         .header-back {
             display: inline-block;
-            background: #667eea;
+            background: #4b5563;
             color: white;
             padding: 8px 16px;
             border-radius: 6px;
@@ -45,7 +80,7 @@
         }
 
         .header-back:hover {
-            background: #764ba2;
+            background: #374151;
             transform: translateY(-2px);
         }
 
@@ -96,9 +131,9 @@
             background: white;
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #bfa36b;
         }
 
         .task-card:hover {
@@ -194,25 +229,18 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="header">
-            <a href="/projects" class="header-back">← Back to Projects</a>
-            <h1 class="header-title">📋 {{ project['name'] }}</h1>
-            <p style="color: #666; margin-top: 5px;">{{ project['description'] }}</p>
-            <div class="project-info">
-                <div class="info-item">
-                    <span class="info-label">Status:</span>
-                    <span>{{ project['status'] }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Budget:</span>
-                    <span>${{ project['budget'] }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Duration:</span>
-                    <span>{{ project['duration'] }}</span>
-                </div>
-            </div>
+                <header class="pm-header">
+                    <div class="pm-header__inner">
+                        <div class="pm-header__content">
+                            <h1 class="pm-title">{{ project['name'] }}</h1>
+                            <p class="pm-subtitle">{{ project['description'] if project.get('description') else 'Task list and progress for this project.' }}</p>
+                        </div>
+                        <div class="pm-header__actions">
+                            <a href="/projects" class="btn btn-ghost" style="margin-right:8px;">← Back</a>
+                            <a href="/tasks/create?proj_id={{ project['proj_id'] }}" class="btn btn-primary">+ New Task</a>
+                        </div>
+                    </div>
+                </header>
         </div>
 
         <div class="tasks-container">
@@ -222,8 +250,16 @@
                     <h3 class="task-title">{{ task['title'] if task.get('title') else task.get('name', 'Untitled Task') }}</h3>
                     <p class="task-description">{{ task['description'] if task.get('description') else 'No description' }}</p>
                     <span class="task-status {{ task['status'] if task.get('status') else 'pending' }}">
-                        {{ task['status'] if task.get('status') else 'Pending' }}
+                        {% if task.get('status') == 'inprogress' %}Active
+                        {% elif task.get('status') == 'completed' %}Completed
+                        {% elif task.get('status') == 'pending' %}Pending
+                        {% elif task.get('status') == 'on-hold' or task.get('status') == 'paused' %}Paused
+                        {% else %}{{ task.get('status') }}{% endif %}
                     </span>
+                    <div class="task-actions" style="margin-top:12px; display:flex; gap:8px;">
+                        <a href="/tasks/update?id={{ task['id'] }}" class="btn-create">Edit</a>
+                        <a href="/tasks/delete?id={{ task['id'] }}" class="btn-create" style="background:#e74c3c;">Remove</a>
+                    </div>
                 </div>
                 {% endfor %}
             {% else %}

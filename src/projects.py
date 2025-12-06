@@ -38,14 +38,15 @@ def update_project_form(request:Request,id:int):
     return templates.TemplateResponse('update_project.html',{'request':request,'project':data})
 
 @router.post('/projects/update')
-def update_project(request: Request, proj_id=Form(...), name=Form(...), description=Form(...), budget=Form(...), duration=Form(...)):
+def update_project(request: Request, proj_id=Form(...), name=Form(...), description=Form(...), budget=Form(...), duration=Form(...), status=Form(...)):
 
     data={'name':name,
-          'description':description,
-          'budget':budget,
-          'duration':duration,
-          }
-    res =db.table('projects').update(data).eq('proj_id',proj_id).execute()
+        'description':description,
+        'budget':budget,
+        'duration':duration,
+        'status': status,
+        }
+    res = db.table('projects').update(data).eq('proj_id',proj_id).execute()
     return RedirectResponse('/projects',status_code=302)
 
 

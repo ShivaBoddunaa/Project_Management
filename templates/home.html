@@ -12,11 +12,26 @@
             box-sizing: border-box;
         }
 
+                :root{
+                    --bg-start: #F7F7F9;
+                    --bg-end:   #FFFFFF;
+                    --primary:  #0b1220;
+                    --accent:   #2563EB;
+                    --accent-2: #BFA36B;
+                    --card-shadow: rgba(11,17,32,0.06);
+                    --card-shadow-strong: rgba(11,17,32,0.12);
+                    --radius: 10px;
+                    --max-width: 1200px;
+                }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: Inter, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(180deg, var(--bg-start) 0%, var(--bg-end) 100%);
             min-height: 100vh;
             padding: 40px 20px;
+            color: var(--primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
@@ -24,14 +39,37 @@
             margin: 0 auto;
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 50px;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
+                /* Header: modern SaaS-style */
+                .pm-header{
+                    padding: 28px 0 36px 0;
+                    width: 100%;
+                    box-sizing: border-box;
+                    border-bottom: 1px solid rgba(15,17,32,0.04);
+                    margin-bottom: 18px;
+                }
+
+                .pm-header__inner{
+                    max-width: var(--max-width);
+                    margin: 0 auto;
+                    display:flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 20px;
+                    padding: 0 20px;
+                }
+
+                .pm-header__content{ flex:1 1 auto; text-align:center }
+
+                .pm-title{ margin:0; font-weight:800; font-size:clamp(28px,4vw,44px); color:var(--primary); line-height:1 }
+                .pm-subtitle{ margin:8px 0 0 0; color:rgba(11,17,32,0.65); font-weight:500; font-size:clamp(14px,1.6vw,16px) }
+
+                .pm-header__actions{ flex:0 0 auto }
+
+                .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 16px; border-radius:8px; font-weight:600; font-size:14px; text-decoration:none; cursor:pointer; border:none }
+                .btn-primary{ background: linear-gradient(180deg,var(--accent) 0%, color-mix(in srgb,var(--accent) 30%,white) 100%); color:white; box-shadow:0 6px 20px rgba(37,99,235,0.12) }
+                .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 14px 36px rgba(37,99,235,0.14) }
+
+                @media (max-width:880px){ .pm-header__inner{ flex-direction:column; gap:12px; align-items:center } .pm-header__content{text-align:center} }
 
         .header-title {
             color: white;
@@ -49,7 +87,7 @@
         }
 
         .create-btn {
-            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            background: linear-gradient(135deg, #bfa36b 0%, #d4b96a 100%);
             color: white;
             border: none;
             padding: 14px 32px;
@@ -58,7 +96,7 @@
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+            box-shadow: 0 4px 15px rgba(191,163,107,0.28);
             text-decoration: none;
             display: inline-block;
         }
@@ -125,14 +163,15 @@
 
         .project-id {
             font-size: 0.75em;
-            color: #667eea;
+            color: #bfa36b;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            border: 2px solid #667eea;
+            border: 2px solid #bfa36b;
             padding: 6px 12px;
             border-radius: 4px;
             display: inline-block;
+            background: rgba(191,163,107,0.04);
         }
 
         .created-time {
@@ -278,12 +317,12 @@
         }
 
         .btn-update {
-            background-color: #3498db;
+            background-color: #4b5563;
             color: white;
         }
 
         .btn-update:hover {
-            background-color: #2980b9;
+            background-color: #374151;
             transform: translateY(-2px);
         }
 
@@ -319,7 +358,7 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             font-size: 0.95em;
             font-weight: 600;
-            color: #667eea;
+            color: #1f2937;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -352,19 +391,18 @@
 </head>
 
 <body>
-    <div class="greeting">
-        <span class="greeting-emoji">👋</span>
-        <span>Hi User!</span>
-    </div>
-
-    <div class="container">
-        <div class="header">
-            <div class="header-title">
-                <h1>📊 Project Management Dashboard</h1>
-                <p>Track and manage all your projects in one place</p>
-            </div>
-            <a href="/projects/create" class="create-btn">+ Create New Project</a>
-        </div>
+        <div class="container">
+                <header class="pm-header">
+                    <div class="pm-header__inner">
+                        <div class="pm-header__content">
+                            <h1 class="pm-title">Project Management Dashboard</h1>
+                            <p class="pm-subtitle">Real‑time visibility into projects, priorities, and timelines</p>
+                        </div>
+                        <div class="pm-header__actions">
+                            <a href="/projects/create" class="btn btn-primary">+ New Project</a>
+                        </div>
+                    </div>
+                </header>
 
 <!-------------------------------------------------  CARDS               ------------------>
 
@@ -374,35 +412,35 @@
             <div class="project-card">
                 <div class="card-header">
                     <div class="card-id-time">
-                        <span class="project-id">ID: {{ project['proj_id'] }}</span>
+                        <span class="project-id">Ref: {{ project['proj_id'] }}</span>
                         <span class="created-time">📅 {{ project['created_at'] }}</span>
                     </div>
                     <select class="status-dropdown {{ project['status'] if project.get('status') else 'in-progress' }}" onchange="updateStatus('{{ project['proj_id'] }}', this.value)">
-                        <option value="in-progress" {% if project.get('status') == 'in-progress' %}selected{% endif %}>In-Progress</option>
-                        <option value="delivered" {% if project.get('status') == 'delivered' %}selected{% endif %}>Delivered</option>
+                        <option value="in-progress" {% if project.get('status') == 'in-progress' %}selected{% endif %}>Active</option>
+                        <option value="delivered" {% if project.get('status') == 'delivered' %}selected{% endif %}>Completed</option>
                         <option value="pending" {% if project.get('status') == 'pending' %}selected{% endif %}>Pending</option>
                     </select>
                 </div>
 
                 <div class="card-body">
                     <h3 class="project-name"><a href="/projects/{{ project['proj_id'] }}/tasks" style="text-decoration: none; color: #222;">{{ project['name'] }}</a></h3>
-                    <p class="project-description">{{ project['description'] }}</p>
+                    <p class="project-description">{{ project['description'] if project.get('description') else 'Product roadmap, milestones, and key deliverables.' }}</p>
 
                     <div class="card-details">
                         <div class="detail-item">
-                            <span class="detail-label">Budget</span>
+                            <span class="detail-label">Allocated Budget</span>
                             <span class="budget">{{ project['budget'] }}</span>
                         </div>
                         <div class="detail-item">
-                            <span class="detail-label">Duration</span>
+                            <span class="detail-label">Estimated Timeline</span>
                             <span class="duration">{{ project['duration'] }}</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-footer">
-                    <a href = "/projects/update?id={{project['proj_id']}}" class="btn btn-update">Update</a>
-                    <a href = "/projects/delete?id={{project['proj_id']}}" class="btn btn-delete">Delete</a>
+                    <a href = "/projects/update?id={{project['proj_id']}}" class="btn btn-update">Edit</a>
+                    <a href = "/projects/delete?id={{project['proj_id']}}" class="btn btn-delete">Remove</a>
                 </div>
             </div>
 
