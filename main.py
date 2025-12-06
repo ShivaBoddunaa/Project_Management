@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from mangum import Mangum
 from src.projects import router as projects_router
 from src.tasks import router as tasks_router
 
@@ -14,3 +15,5 @@ app.include_router(tasks_router)
 
 # app.include_router(projects_router, prefix="/projects")
 # app.include_router(tasks_router, prefix="/tasks")
+
+handler = Mangum(app)
