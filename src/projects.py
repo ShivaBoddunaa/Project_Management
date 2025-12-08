@@ -9,6 +9,10 @@ router=APIRouter(tags=['Projects'])
 
 templates=Jinja2Templates(directory='templates')
 
+@router.get('/')
+def home():
+    RedirectResponse('/projects')
+
 @router.get('/projects')
 def root_projects(request:Request):
     res = db.table('projects').select('*').execute()
